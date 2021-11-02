@@ -9,7 +9,35 @@ import javax.swing.border.*;
 public class Delete_Product {
 	JFrame f;
 
-	Delete_Product() {
+	public ResultSet okButton(String prodId, String sellId) throws SQLException{
+		Connection connection = DriverManager
+				.getConnection("jdbc:mysql://localhost:3306/store_management", "root", "myroot");
+
+		Statement stmt = connection.createStatement();
+
+		String sql = "SELECT prodName, pricePerItem, qtyBought, amount FROM Sell where prodId='"
+				+ prodId + "' and sellId='" + sellId + "'";
+		return stmt.executeQuery(sql);
+	}
+	
+	public void deletingProduct(String prodId, String sellId) throws SQLException {
+		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/store_management",
+				"root", "myroot");
+
+		Statement stmt = connection.createStatement();
+		
+		String sql = "DELETE from Sell where prodId ="+prodId+" and sellId="+sellId;
+		
+//		PreparedStatement sta = connection
+//				.prepareStatement("DELETE from Sell where prodId = ? and sellId=?");
+//
+//		sta.setString(1, prodId);
+//		sta.setString(2, sellId);
+
+		stmt.executeUpdate(sql);
+	}
+	
+	public void delete() {
 
 		f = new JFrame();
 		f.getContentPane().setBackground(new Color(255, 250, 240));
@@ -82,14 +110,7 @@ public class Delete_Product {
 					try {
 						// Connection
 
-						Connection connection = DriverManager
-								.getConnection("jdbc:mysql://localhost:3306/store_management", "root", "myroot");
-
-						Statement stmt = connection.createStatement();
-
-						String sql = "SELECT prodName, pricePerItem, qtyBought, amount FROM Sell where prodId='"
-								+ prodId + "' and sellId='" + sellId + "'";
-						ResultSet rs = stmt.executeQuery(sql);
+						ResultSet rs = okButton(prodId, sellId);
 						// STEP 5: Extract data from result set
 						while (rs.next()) {
 							// Retrieve by column name
@@ -135,16 +156,7 @@ public class Delete_Product {
 				try {
 					// Connection
 
-					Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/store_management",
-							"root", "myroot");
-
-					PreparedStatement sta = connection
-							.prepareStatement("DELETE from Sell where prodId = ? and sellId=?");
-
-					sta.setString(1, prodId);
-					sta.setString(2, sellId);
-
-					sta.executeUpdate();
+					deletingProduct(prodId,sellId);
 					JOptionPane.showMessageDialog(submit, "Entry Deleted Succesfully");
 
 				} catch (Exception exception) {
@@ -211,8 +223,8 @@ public class Delete_Product {
 		f.setVisible(true);
 	}
 
-	public static void main(String args[]) {
-
-		new Delete_Product();
-	}
+//	public static void main(String args[]) {
+//
+//		new Delete_Product();
+//	}
 }

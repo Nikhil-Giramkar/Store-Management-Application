@@ -14,7 +14,7 @@ import javax.swing.border.*;
 public class Bill {
 	JFrame f;
 	
-	public Bill() {
+	public void bill() {
 		f = new JFrame();
 		
 		JLabel title = new JLabel("Create Bill");
@@ -49,7 +49,7 @@ public class Bill {
 					
 					Statement stmt = connection.createStatement();
 					
-					String sql = "SELECT prodName,amount FROM Sell where sellId='" + sid + "'";
+					String sql = "SELECT prodName,qtyBought,amount FROM Sell where sellId='" + sid + "'";
 					ResultSet rs = stmt.executeQuery(sql);
 					
 					File file = new File("Bill.txt");
@@ -75,25 +75,26 @@ public class Bill {
                     bw.write("Sell ID: " + sid);
                     bw.newLine();
                     bw.newLine();
-                    bw.write("\tProduct Name\t\t\t|\t\tAmount");
+                    bw.write("\tProduct Name\t\t|\tQty\t|\tAmount(Rs.)");
                     bw.newLine();
-                    bw.write("\t--------------------------------|-----------------------");
+                    bw.write("\t------------------------|---------------|-----------------");
                     bw.newLine();
                     
                     while(rs.next())
                     {
                     	String prodName = rs.getString("prodName");
+                    	String qty = rs.getString("qtyBought");
                     	String amt = rs.getString("amount");
                     	float amount = Float.parseFloat(amt);
                     	total += amount;
-                    	bw.write("\t" + prodName + "\t\t\t|\t\t" + amt);
+                    	bw.write("\t" + prodName + "\t\t|\t" + qty + "\t|\t" + amt);
                     	bw.newLine();
                     	bw.flush();
                     }
                     
-                    bw.write("\t--------------------------------|-----------------------");
+                    bw.write("\t------------------------|---------------|-----------------");
                     bw.newLine();
-                    bw.write("\tTotal Amount:\t\t\t|\t\t" + total);
+                    bw.write("\tTotal Amount:\t\t\t\t|\t" + total);
                     
                     
                     bw.flush();
@@ -113,8 +114,8 @@ public class Bill {
 		f.setVisible(true);
 	}
 	
-	public static void main(String args[])
-	{
-		new Bill();
-	}
+//	public static void main(String args[])
+//	{
+//		new Bill();
+//	}
 }

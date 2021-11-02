@@ -9,7 +9,28 @@ import javax.swing.border.*;
 public class Refill_stock {
 	JFrame f;
 
-	Refill_stock() {
+	public ResultSet okButton(String prodId) throws SQLException{
+		Connection connection = DriverManager
+				.getConnection("jdbc:mysql://localhost:3306/store_management", "root", "myroot");
+
+		Statement stmt = connection.createStatement();
+
+		String sql = "SELECT prodName, pricePerItem, stock FROM Product where prodId='" + prodId + "'";
+		
+		return stmt.executeQuery(sql);
+	}
+	
+	public void refillingStock(int total_stock, String prodId) throws SQLException {
+		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/store_management",
+				"root", "myroot");
+		PreparedStatement sta = connection
+				.prepareStatement("UPDATE Product SET stock = ? WHERE prodId = ?");
+		sta.setInt(1, total_stock);
+		sta.setString(2, prodId);
+		sta.executeUpdate();
+	}
+	
+	public void refill() {
 
 		f = new JFrame();
 		f.getContentPane().setBackground(new Color(224, 255, 255));
@@ -86,13 +107,7 @@ public class Refill_stock {
 					try {
 						// Connection
 
-						Connection connection = DriverManager
-								.getConnection("jdbc:mysql://localhost:3306/store_management", "root", "myroot");
-
-						Statement stmt = connection.createStatement();
-
-						String sql = "SELECT prodName, pricePerItem, stock FROM Product where prodId='" + prodId + "'";
-						ResultSet rs = stmt.executeQuery(sql);
+						ResultSet rs = okButton(prodId);
 						// STEP 5: Extract data from result set
 						while (rs.next()) {
 							// Retrieve by column name
@@ -184,13 +199,7 @@ public class Refill_stock {
 				Total_Stock.setText(total);
 
 				try {
-					Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/store_management",
-							"root", "myroot");
-					PreparedStatement sta = connection
-							.prepareStatement("UPDATE Product SET stock = ? WHERE prodId = ?");
-					sta.setInt(1, total_stock);
-					sta.setString(2, prodId);
-					sta.executeUpdate();
+					refillingStock(total_stock, prodId);
 					JOptionPane.showMessageDialog(submit, "Form Submitted Succesfully");
 
 				} catch (Exception exception) {
@@ -213,8 +222,8 @@ public class Refill_stock {
 		f.setVisible(true);
 	}
 
-	public static void main(String args[]) {
-
-		new Refill_stock();
-	}
+//	public static void main(String args[]) {
+//
+//		new Refill_stock();
+//	}
 }

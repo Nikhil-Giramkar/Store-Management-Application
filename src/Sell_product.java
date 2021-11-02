@@ -10,7 +10,46 @@ public class Sell_product {
 	JFrame f;
 	int stock = 0;
 
-	Sell_product() {
+//	Function to retrieve data from PRODUCT table 
+	public ResultSet okButton(String prodId) throws SQLException {
+		Connection connection = DriverManager
+				.getConnection("jdbc:mysql://localhost:3306/store_management", "root", "myroot");
+
+		Statement stmt = connection.createStatement();
+
+		String sql = "SELECT prodName, pricePerItem, stock FROM Product where prodId='" + prodId + "'";
+		
+		return stmt.executeQuery(sql);
+	}
+	
+//	Function for inserting sell data into SELL table
+	public void addToCartButton(String Sellid, String prodId, String prodName, int qtyint, String pricePerItem, String amt, 
+			java.sql.Date sqlDate, java.sql.Timestamp sqlTime) throws SQLException {
+		
+				
+			// Connection
+
+			Connection connection = DriverManager
+					.getConnection("jdbc:mysql://localhost:3306/store_management", "root", "myroot");
+
+			PreparedStatement sta = connection.prepareStatement(
+					"insert into Sell(sellId,prodId,prodName,qtyBought,pricePerItem,amount,timeWhenSold,dateWhenSold) values(?,?,?,?,?,?,?,?)");
+			sta.setString(1, Sellid);
+			sta.setString(2, prodId);
+			sta.setString(3, prodName);
+			sta.setInt(4, qtyint);
+			sta.setString(5, pricePerItem);
+			sta.setString(6, amt);
+			sta.setTimestamp(7, sqlTime);
+			sta.setDate(8, sqlDate);
+			
+			sta.executeUpdate();
+			
+
+		
+	}
+	
+	public void sell() {
 
 		f = new JFrame();
 		f.getContentPane().setBackground(new Color(250, 240, 230));
@@ -88,13 +127,13 @@ public class Sell_product {
 					try {
 						// Connection
 
-						Connection connection = DriverManager
-								.getConnection("jdbc:mysql://localhost:3306/store_management", "root", "myroot");
-
-						Statement stmt = connection.createStatement();
-
-						String sql = "SELECT prodName, pricePerItem, stock FROM Product where prodId='" + prodId + "'";
-						ResultSet rs = stmt.executeQuery(sql);
+//						Connection connection = DriverManager
+//								.getConnection("jdbc:mysql://localhost:3306/store_management", "root", "myroot");
+//
+//						Statement stmt = connection.createStatement();
+//
+//						String sql = "SELECT prodName, pricePerItem, stock FROM Product where prodId='" + prodId + "'";
+						ResultSet rs = okButton(prodId);
 						// STEP 5: Extract data from result set
 						while (rs.next()) {
 							// Retrieve by column name
@@ -206,29 +245,14 @@ public class Sell_product {
 
 				AMOUNT.setText(amt);
 
-				if(qtyint<stock && qtyint!=0 && Sellid.length()!=0)
+				if(qtyint<=stock && qtyint!=0 && Sellid.length()!=0 && stock>0)
 				{
 					try {
-						// Connection
-
-						Connection connection = DriverManager
-								.getConnection("jdbc:mysql://localhost:3306/store_management", "root", "myroot");
-
-						PreparedStatement sta = connection.prepareStatement(
-								"insert into Sell(sellId,prodId,prodName,qtyBought,pricePerItem,amount,timeWhenSold,dateWhenSold) values(?,?,?,?,?,?,?,?)");
-						sta.setString(1, Sellid);
-						sta.setString(2, prodId);
-						sta.setString(3, prodName);
-						sta.setInt(4, qtyint);
-						sta.setString(5, pricePerItem);
-						sta.setString(6, amt);
-						sta.setTimestamp(7, sqlTime);
-						sta.setDate(8, sqlDate);
-
-						sta.executeUpdate();
+						addToCartButton(Sellid, prodId, prodName, qtyint, pricePerItem, amt, sqlDate, sqlTime);
+						
 						JOptionPane.showMessageDialog(submit, "Added to Cart Succesfully");
-
-					} catch (Exception exception) {
+					}
+					catch (Exception exception) {
 						exception.printStackTrace();
 					}
 				}
@@ -267,8 +291,8 @@ public class Sell_product {
 		f.setVisible(true);
 	}
 
-	public static void main(String args[]) {
-
-		new Sell_product();
-	}
+//	public static void main(String args[]) {
+//
+//		new Sell_product();
+//	}
 }

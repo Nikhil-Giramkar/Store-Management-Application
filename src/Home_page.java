@@ -29,7 +29,7 @@ public class Home_page {
 		f.getContentPane().add(sell_button);
 		sell_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new Sell_product().f.setVisible(true);
+				new Sell_product().sell();
 
 			}
 		});
@@ -46,7 +46,7 @@ public class Home_page {
 		f.getContentPane().add(purchase_button);
 		purchase_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new Purchase_stock().f.setVisible(true);
+				new Purchase_stock().purchase();
 
 			}
 		});
@@ -62,7 +62,7 @@ public class Home_page {
 		f.getContentPane().add(delete_button);
 		delete_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new Delete_Product().f.setVisible(true);
+				new Delete_Product().delete();
 
 			}
 		});
@@ -78,7 +78,7 @@ public class Home_page {
 		f.getContentPane().add(refill_stock);
 		refill_stock.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new Refill_stock().f.setVisible(true);
+				new Refill_stock().refill();
 
 			}
 		});
@@ -95,7 +95,7 @@ public class Home_page {
 				f.getContentPane().add(create_bill);
 				create_bill.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						new Bill().f.setVisible(true);
+						new Bill().bill();
 					}
 				});
 				create_bill.setFont(new Font("Arial", Font.PLAIN, 23));
