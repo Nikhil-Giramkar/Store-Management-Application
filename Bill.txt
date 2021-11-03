@@ -1,0 +1,11 @@
+			Store Management Application			
+Date: 26/10/2021
+Time: 12:45 am
+
+Sell ID: saumen96
+
+	Product Name		|	Qty	|	Amount(Rs.)
+	------------------------|---------------|-----------------
+	nescafe coffee		|	5	|	100.00
+	------------------------|---------------|-----------------
+	Total Amount:				|	100.0

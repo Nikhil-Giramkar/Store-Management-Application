@@ -10,7 +10,22 @@ import java.awt.event.ActionEvent;
 public class Purchase_stock {
 	JFrame f;
 
-	Purchase_stock() {
+	public void addStock(String prodId, String prodName, String pricePerItem, int stock, java.sql.Date sqlDate, java.sql.Timestamp sqlTime) throws SQLException {
+		Connection connection = DriverManager
+				.getConnection("jdbc:mysql://localhost:3306/store_management", "root", "myroot");
+
+		PreparedStatement sta = connection.prepareStatement("insert into product values(?,?,?,?,?,?)");
+		sta.setString(1, prodId);
+		sta.setString(2, prodName);
+		sta.setString(3, pricePerItem);
+		sta.setInt(4, stock);
+		sta.setDate(5, sqlDate);
+		sta.setTimestamp(6, sqlTime);
+
+		sta.executeUpdate();
+	}
+	
+	public void purchase() {
 
 		f = new JFrame();
 		f.getContentPane().setBackground(new Color(240, 255, 240));
@@ -106,19 +121,9 @@ public class Purchase_stock {
 
 					try {
 						// Connection
-
-						Connection connection = DriverManager
-								.getConnection("jdbc:mysql://localhost:3306/store_management", "root", "myroot");
-
-						PreparedStatement sta = connection.prepareStatement("insert into product values(?,?,?,?,?,?)");
-						sta.setString(1, prodId);
-						sta.setString(2, prodName);
-						sta.setString(3, pricePerItem);
-						sta.setInt(4, stock);
-						sta.setDate(5, sqlDate);
-						sta.setTimestamp(6, sqlTime);
-
-						sta.executeUpdate();
+						
+						addStock(prodId, prodName, pricePerItem, stock, sqlDate, sqlTime);
+						
 						JOptionPane.showMessageDialog(submit, "Added to store successfully");
 
 					}
@@ -171,8 +176,8 @@ public class Purchase_stock {
 
 	}
 
-	public static void main(String args[]) {
-
-		new Purchase_stock();
-	}
+//	public static void main(String args[]) {
+//
+//		new Purchase_stock();
+//	}
 }

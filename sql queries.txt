@@ -1,0 +1,30 @@
+use store_management;
+
+create table Product(
+ prodId varchar(25) not null primary key,
+ prodName varchar(50) not null,
+ pricePerItem numeric(10,2) not null,
+ stock int not null,
+ dateWhenAdded Date not null,
+ timeWhenAdded Time not null
+ );
+ 
+ 
+create table Sell(
+ sellId varchar(25) not null,
+ prodId varchar(25) references Product(prodId),
+ prodName varchar(50) references Product(prodName),
+ qtyBought int not null,
+ pricePerItem numeric(10,2) references Product(pricePerItem),
+ amount numeric(10,2) not null,
+ timeWhenSold Time not null,
+ dateWhenSold Date not null
+ );
+ 
+create trigger Delete_from_cart before delete on Sell for each row 
+update Product SET Product.stock = Product.stock + Old.qtyBought where 
+Product.prodId = Old.prodId;
+
+create trigger stock_deduction before insert on Sell for each row
+update Product set Product.stock = Product.stock - NEW.qtyBought 
+where Product.prodId = NEW.prodId;

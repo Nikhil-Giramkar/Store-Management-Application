@@ -20,6 +20,7 @@ create table Product(
 --Sell Table
 
 create table Sell(
+ transacId int not null auto_increment primary key,
  sellId varchar(25) not null,
  prodId varchar(25) references Product(prodId),
  prodName varchar(50) references Product(prodName),
@@ -44,7 +45,7 @@ Product.prodId = Old.prodId;
 --Stock Deduction trigger
 
 create trigger stock_deduction before insert on Sell for each row
-update Product set Product.stock = Product.stock - NEW.qtyBought 
-where Product.prodId = NEW.prodId;
+update Product set Product.stock = Product.stock - NEW.qtyBought
+ where Product.prodId = NEW.prodId
 
 --------------------------------------
